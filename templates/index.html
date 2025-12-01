@@ -3,51 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Short URL</title>
+    <title>PixelLink - URL Shortener</title>
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js" integrity="sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/htmx-ext-json-enc@2.0.1/json-enc.js"></script>
-</head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+   </head>
 <body>
-    <h1>Welcome to Short URL Web Page</h1>
-    <form hx-ext="json-enc" 
-          hx-post="http://localhost:8000/shorten"
-          hx-trigger="submit"
-          hx-target="#result-holder"
-          hx-swap="none">
-        <label for="url">Enter URL: </label>
-        <input type="text" name="url" value="" required />
-        <button type="submit">Submit</button>
-    </form>
-    <div id="result-holder"></div>
+
+    <div class="scanline"></div>
     
-    <script>
-        document.body.addEventListener('htmx:afterRequest', function(event){
-            if (event.detail.successful) {
-                try {
-                    // Parse the JSON response
-                    const response = JSON.parse(event.detail.xhr.responseText);
-                    const shortCode = response.shortCode;
-                    
-                    if (shortCode) {
-                        const baseUrl = 'http://localhost:8000/shorten/';
-                        const shortUrl = baseUrl + shortCode;
-                        
-                        // Display the result
-                        const resultHolder = document.getElementById('result-holder');
-                        resultHolder.innerHTML = `
-                            <p>Short URL created successfully!</p>
-                            <p><strong>Short URL:</strong> <a href="${shortUrl}" target="_blank">${shortUrl}</a></p>
-                            <p><strong>Original URL:</strong> ${response.url}</p>
-                            <p><strong>Created:</strong> ${response.createdAt}</p>
-                        `;
-                    }
-                } catch (error) {
-                    console.error('Error parsing response:', error);
-                    document.getElementById('result-holder').innerHTML = 
-                        '<p style="color: red;">Error processing response</p>';
-                }
-            }
-        });
-    </script>
+    <div class="container">
+        <div class="header">
+            <h1>PIXELLINK</h1>
+            <div class="tagline">[ URL SHORTENER V1.0 ]</div>
+        </div>
+        
+        <div class="terminal-box">
+            <div class="terminal-header">ENTER URL TO SHORTEN</div>
+            
+            <form hx-ext="json-enc" 
+                  hx-post="http://localhost:8000/shorten"
+                  hx-trigger="submit"
+                  hx-target="#result-holder"
+                  hx-swap="none">
+                <label for="url">LONG_URL:</label>
+                <input type="text" 
+                       name="url" 
+                       id="url"
+                       placeholder="https://example.com/very/long/url/here" 
+                       required />
+                <button type="submit">[ SHORTEN ]</button>
+            </form>
+        </div>
+        
+        <div id="result-holder"></div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
